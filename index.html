@@ -1,15 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Winix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial;
+    }
+
+    body {
+      background: #0f0f0f;
+      color: white;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      background: #111;
+      border-bottom: 1px solid #222;
+    }
+
+    header h1 {
+      color: orange;
+    }
+
+    nav a {
+      margin-left: 15px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero h2 {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: orange;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .services {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 50px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      width: 250px;
+      text-align: center;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      color: orange;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #222;
+      margin-top: 30px;
+      color: #777;
+    }
+  </style>
 </head>
+
 <body>
 
-  <h1>🔥 Winix - اربح بسهولة</h1>
-  <p>أهلاً في موقعك</p>
+<header>
+  <h1>🔥 Winix</h1>
+  <nav>
+    <a href="#">الرئيسية</a>
+    <a href="#">الخدمات</a>
+    <a href="#">تواصل</a>
+  </nav>
+</header>
 
-  <a href="services.html">Services</a>
+<section class="hero">
+  <h2>اربح بسهولة مع Winix 💰</h2>
+  <p>منصة بسيطة لتحقيق دخل من الإنترنت</p>
+  <button class="btn">ابدأ الآن</button>
+</section>
+
+<section class="services">
+  <div class="card">
+    <h3>💸 أرباح يومية</h3>
+    <p>احصل على دخل يومي بسهولة</p>
+  </div>
+
+  <div class="card">
+    <h3>📈 استثمار</h3>
+    <p>نظام استثمار بسيط وآمن</p>
+  </div>
+
+  <div class="card">
+    <h3>🤝 دعوة أصدقاء</h3>
+    <p>اربح من خلال دعوة الآخرين</p>
+  </div>
+</section>
+
+<footer>
+  © 2026 Winix - جميع الحقوق محفوظة
+</footer>
 
 </body>
 </html>
