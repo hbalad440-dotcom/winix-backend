@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>دعوة الأصدقاء - Winix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color: white;
+      direction: rtl;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .box {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 400px;
+      margin: auto;
+      margin-top: 50px;
+      box-shadow: 0 0 20px rgba(255,165,0,0.2);
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+      color: orange;
+      margin-bottom: 20px;
+    }
+
+    .link {
+      background: #222;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      word-break: break-all;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: orange;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #ff9900;
+      transform: scale(1.05);
+    }
+
+    .back {
+      display: block;
+      margin-top: 20px;
+      color: #aaa;
+      text-decoration: none;
+    }
+
+    .back:hover {
+      color: orange;
+    }
+
+    /* إشعار */
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: orange;
+      color: black;
+      padding: 12px 20px;
+      border-radius: 10px;
+      display: none;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>👥 دعوة الأصدقاء</h2>
+
+  <p>شارك الرابط واربح!</p>
+
+  <div class="link" id="refLink"></div>
+
+  <button class="btn" onclick="copyLink()">📋 نسخ الرابط</button>
+
+  <a href="dashboard.html" class="back">🔙 رجوع</a>
+</div>
+
+<div id="toast"></div>
+
+<script>
+
+// إشعار
+function showToast(msg){
+  let t = document.getElementById("toast");
+  t.innerText = msg;
+  t.style.display = "block";
+  setTimeout(()=> t.style.display="none",2000);
+}
+
+// تحقق مستخدم
+let user = localStorage.getItem("user");
+
+if(!user){
+  window.location.href = "login.html";
+}
+
+// 👇 حل مشكلة الرابط محلي + أونلاين
+let base = window.location.origin.includes("file")
+  ? "index.html"
+  : window.location.origin;
+
+let link = base + "?ref=" + user;
+
+document.getElementById("refLink").innerText = link;
+
+// نسخ
+function copyLink() {
+  navigator.clipboard.writeText(link);
+  showToast("✅ تم نسخ الرابط!");
+}
+
+</script>
+
+</body>
+</html>

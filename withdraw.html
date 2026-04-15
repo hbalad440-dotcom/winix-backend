@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>سحب الأرباح</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+
+<style>
+body{
+  background:#0f0f0f;
+  color:white;
+  font-family:Cairo;
+  text-align:center;
+}
+.box{
+  background:#1a1a1a;
+  padding:30px;
+  margin:80px auto;
+  width:320px;
+  border-radius:20px;
+}
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border:none;
+  border-radius:10px;
+  background:#222;
+  color:white;
+}
+button{
+  background:orange;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>💸 سحب</h2>
+
+<div>رصيدك: <span id="balance">0</span>$</div>
+
+<input type="number" id="amount" placeholder="المبلغ">
+<input type="text" id="method" placeholder="طريقة السحب">
+
+<button onclick="withdraw()">طلب سحب</button>
+
+<br><br>
+<a href="dashboard.html">🔙 رجوع</a>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, updateDoc, addDoc, collection } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBChYq1GZKU7RQ2rTN_gShncYhBukVPitw",
+  authDomain: "winix-f2660.firebaseapp.com",
+  projectId: "winix-f2660"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let user = localStorage.getItem("user");
+
+if(!user){
+  window.location.href="login.html";
+}
+
+// جلب الرصيد
+async function load(){
+  let ref = doc(db,"users",user);
+  let snap = await getDoc(ref);
+  let data = snap.data();
+
+  document.getElementById("balance").innerText = data.balance;
+}
+load();
+
+// سحب
+window.withdraw = async function(){
+
+  let amount = parseFloat(document.getElementById("amount").value);
+  let method = document.getElementById("method").value;
+
+  let ref = doc(db,"users",user);
+  let snap = await getDoc(ref);
+  let data = snap.data();
+
+  if(amount > data.balance){
+    alert("رصيدك غير كافي");
+    return;
+  }
+
+  // خصم
+  await updateDoc(ref,{
+    balance: data.balance - amount
+  });
+
+  // 🔥 تسجيل الطلب (مهم للأدمن)
+  await addDoc(collection(db,"withdraws"),{
+    user:user,
+    amount:amount,
+    method:method,
+    status:"pending"
+  });
+
+  alert("تم إرسال الطلب");
+
+  load();
+}
+</script>
+
+</body>
+</html>

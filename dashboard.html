@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Winix Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+
+body{
+  background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
+  color:white;
+  direction:rtl;
+}
+
+/* HEADER */
+.header{
+  padding:20px;
+  text-align:center;
+  background:#111;
+  box-shadow:0 0 20px rgba(255,165,0,0.2);
+}
+.header h1{color:orange}
+
+/* CLOCK */
+#clock{font-size:14px;color:#aaa;margin-top:5px}
+
+/* 🔥 NEWS BAR */
+.ticker{
+  background:linear-gradient(90deg,orange,#ff9900);
+  color:black;
+  padding:8px;
+  font-weight:bold;
+}
+
+/* CARDS */
+.container{padding:20px}
+
+.cards{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+  justify-content:center;
+}
+
+.card{
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+  padding:20px;
+  border-radius:20px;
+  width:160px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(255,165,0,0.2);
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 0 30px orange;
+}
+
+.card h3{color:orange;font-size:16px}
+.value{font-size:22px;margin-top:10px}
+
+/* ACTIONS */
+.actions{text-align:center;margin-top:20px}
+
+.btn{
+  padding:12px 20px;
+  margin:8px;
+  background:orange;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.btn:hover{background:#ff9900}
+
+/* WARNING */
+.warning{
+  background:#330000;
+  color:#ff4d4d;
+  padding:10px;
+  margin:15px;
+  border-radius:10px;
+}
+
+/* ABOUT */
+.about{
+  background:#1a1a1a;
+  padding:15px;
+  margin:15px;
+  border-radius:15px;
+}
+.about h3{color:orange}
+.about p,.about li{color:#aaa;font-size:13px}
+
+/* MUSIC */
+.music{margin:20px;text-align:center}
+
+/* NAV */
+.nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#111;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+}
+
+/* 🔔 NOTIFY */
+#notify{
+  position:fixed;
+  top:20px;
+  left:20px;
+  background:orange;
+  color:black;
+  padding:12px;
+  border-radius:10px;
+  display:none;
+  font-weight:bold;
+}
+
+/* 🏅 BADGE */
+.badge{
+  color:gold;
+  font-size:14px;
+  margin-top:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="notify"></div>
+
+<div class="header">
+  <h1 id="welcome">🔥 Winix</h1>
+  <div id="clock"></div>
+  <div class="badge" id="badge"></div>
+</div>
+
+<!-- 🔥 NEWS -->
+<div class="ticker">
+<marquee>
+🔥 مكافأة يومية 160 ل.س | 👥 اربح من الدعوات | ⚠️ الحسابات الوهمية = حظر | 🏆 VIP متاح | 🎵 استمتع بالموسيقى
+</marquee>
+</div>
+
+<div class="container">
+
+  <div class="cards">
+    <div class="card">
+      <h3>💰 الرصيد</h3>
+      <div class="value" id="balance">0</div>
+    </div>
+
+    <div class="card">
+      <h3>👥 الإحالات</h3>
+      <div class="value" id="refs">0</div>
+    </div>
+
+    <div class="card">
+      <h3>🎁 يومي</h3>
+      <div class="value">160 ل.س</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" onclick="daily()">🎁 مكافأة</button>
+    <button class="btn" onclick="addMoney()">➕ إضافة</button>
+    <button class="btn" onclick="withdraw()">💸 سحب</button>
+    <button class="btn" onclick="resetBalance()">♻️ تصفير</button>
+  </div>
+
+  <div class="warning">
+    ⚠️ أي استخدام غير شرعي أو سبام = حظر مباشر.
+  </div>
+
+  <div class="music">
+    <h3>🎵 أغاني</h3>
+    <iframe width="100%" height="200"
+      src="https://www.youtube.com/embed/5qap5aO4i9A">
+    </iframe>
+  </div>
+
+  <div class="about">
+    <h3>ℹ️ عن الموقع</h3>
+    <p>منصة Winix للربح والترفيه.</p>
+
+    <h3>📘 تعليمات</h3>
+    <ul>
+      <li>🎁 سجل دخول يومي</li>
+      <li>👥 ادعُ أصدقاء</li>
+      <li>🚫 لا تستخدم حسابات وهمية</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="nav">
+  <a href="dashboard.html">🏠</a>
+  <a href="invite.html">🔗</a>
+  <a href="profile.html">👤</a>
+  <a href="contact.html">📞</a>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, updateDoc } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSy...",
+  projectId:"winix-f2660"
+});
+
+const db = getFirestore(app);
+
+let user = localStorage.getItem("user");
+
+if(!user){window.location.href="login.html";}
+
+// ⏰ CLOCK
+setInterval(()=>{
+  document.getElementById("clock").innerText=new Date().toLocaleString();
+},1000);
+
+// 🔔 NOTIFY
+function notify(msg){
+  let n=document.getElementById("notify");
+  n.innerText=msg;
+  n.style.display="block";
+  setTimeout(()=>n.style.display="none",2000);
+}
+
+// LOAD USER
+async function load(){
+  let ref = doc(db,"users",user);
+  let snap = await getDoc(ref);
+  let d = snap.data();
+
+  // ❌ حظر
+  if(d.banned){
+    alert("🚫 تم حظرك");
+    window.location.href="login.html";
+  }
+
+  document.getElementById("welcome").innerText="🔥 "+d.username;
+  document.getElementById("balance").innerText=d.balance+" ل.س";
+  document.getElementById("refs").innerText=d.refs;
+
+  // 🏅 شارات
+  let badge="";
+  if(d.refs>=10) badge="🏆 VIP";
+  else if(d.refs>=5) badge="⭐ نشيط";
+  else badge="👤 عادي";
+
+  document.getElementById("badge").innerText=badge;
+}
+load();
+
+// 🎁 DAILY
+window.daily = async ()=>{
+  let ref = doc(db,"users",user);
+  let snap = await getDoc(ref);
+  let d = snap.data();
+
+  await updateDoc(ref,{balance:d.balance+160});
+  notify("🎁 +160 ل.س");
+  load();
+}
+
+// ➕ ADD
+window.addMoney = async ()=>{
+  let ref = doc(db,"users",user);
+  let snap = await getDoc(ref);
+  let d = snap.data();
+
+  await updateDoc(ref,{balance:d.balance+50});
+  notify("💰 تم الإضافة");
+  load();
+}
+
+// 💸 WITHDRAW
+window.withdraw = async ()=>{
+  let ref = doc(db,"users",user);
+  let snap = await getDoc(ref);
+  let d = snap.data();
+
+  if(d.balance<50){
+    notify("❌ رصيد قليل");
+    return;
+  }
+
+  await updateDoc(ref,{balance:d.balance-50});
+  notify("💸 تم السحب");
+  load();
+}
+
+// ♻️ RESET
+window.resetBalance = async ()=>{
+  let ref = doc(db,"users",user);
+  await updateDoc(ref,{balance:0});
+  notify("♻️ تم تصفير الرصيد");
+  load();
+}
+
+</script>
+
+</body>
+</html>

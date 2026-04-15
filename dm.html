@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>💌 رسائل خاصة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{background:#0f0f0f;color:white;font-family:Cairo;text-align:center}
+#chat{height:300px;overflow:auto;background:#1a1a1a;margin:10px;padding:10px;border-radius:10px}
+input{padding:10px;border:none;border-radius:8px;margin:5px}
+button{padding:10px;background:orange;border:none;border-radius:8px}
+</style>
+</head>
+
+<body>
+
+<h2>💌 محادثة خاصة</h2>
+
+<input id="to" placeholder="اسم المستخدم">
+
+<div id="chat"></div>
+
+<input id="msg" placeholder="اكتب رسالة">
+<button onclick="send()">إرسال</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSy...",
+  projectId:"winix-f2660"
+});
+
+const db = getFirestore(app);
+
+let user = localStorage.getItem("user");
+
+window.send = async ()=>{
+  let to = document.getElementById("to").value;
+  let text = document.getElementById("msg").value;
+
+  if(!to || !text) return;
+
+  await addDoc(collection(db,"messages"),{
+    from:user,
+    to:to,
+    text:text,
+    time:Date.now()
+  });
+
+  document.getElementById("msg").value="";
+}
+
+// استقبال
+onSnapshot(collection(db,"messages"),(snap)=>{
+  let box=document.getElementById("chat");
+  box.innerHTML="";
+
+  snap.forEach(doc=>{
+    let d=doc.data();
+
+    if(d.from===user || d.to===user){
+      box.innerHTML += `
+      <div>💬 ${d.from} ➜ ${d.to}: ${d.text}</div>`;
+    }
+  });
+});
+
+</script>
+
+</body>
+</html>

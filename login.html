@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول - Winix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      direction: rtl;
+    }
+
+    .login-box {
+      background: #1a1a1a;
+      padding: 35px;
+      border-radius: 20px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(255,165,0,0.25);
+    }
+
+    h2 { color: orange; margin-bottom: 20px; }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      background: #222;
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: orange;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="login-box">
+  <h2>🔐 تسجيل الدخول</h2>
+  
+  <input type="text" id="username" placeholder="اسم المستخدم">
+  <input type="password" id="password" placeholder="كلمة المرور">
+  
+  <button onclick="login()">دخول</button>
+
+  <div class="error" id="error"></div>
+
+  <a href="register.html">إنشاء حساب</a>
+</div>
+
+<!-- 🔥 Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBChYq1GZKU7RQ2rTN_gShncYhBukVPitw",
+  authDomain: "winix-f2660.firebaseapp.com",
+  projectId: "winix-f2660",
+  storageBucket: "winix-f2660.firebasestorage.app",
+  messagingSenderId: "467492949746",
+  appId: "1:467492949746:web:4a0b7adfd5373df1e38a6b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.login = async function () {
+
+  let username = document.getElementById("username").value.trim();
+  let password = document.getElementById("password").value.trim();
+  let error = document.getElementById("error");
+
+  if(!username || !password){
+    error.innerText = "⚠️ عبّي كل الحقول";
+    error.style.display = "block";
+    return;
+  }
+
+  let userRef = doc(db, "users", username);
+  let userSnap = await getDoc(userRef);
+
+  // ❌ المستخدم غير موجود
+  if(!userSnap.exists()){
+    error.innerText = "❌ المستخدم غير موجود";
+    error.style.display = "block";
+    return;
+  }
+
+  let data = userSnap.data();
+
+  // ❌ كلمة السر غلط
+  if(data.password !== password){
+    error.innerText = "❌ كلمة المرور غلط";
+    error.style.display = "block";
+    return;
+  }
+
+  // ✅ نجاح
+  localStorage.setItem("user", username);
+
+  window.location.href = "dashboard.html";
+}
+</script>
+
+</body>
+</html>

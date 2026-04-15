@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <title>Winix</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -19,58 +19,38 @@
     body {
       background: #0f0f0f;
       color: white;
+      text-align: center;
       direction: rtl;
     }
 
     header {
-      display: flex;
-      justify-content: space-between;
       padding: 20px;
       background: #111;
       border-bottom: 1px solid #222;
-      align-items: center;
     }
 
-    header h1 {
+    h1 {
       color: orange;
-      font-weight: 700;
+      margin-bottom: 10px;
     }
 
-    nav a {
-      margin-left: 20px;
-      color: white;
-      text-decoration: none;
-      transition: 0.3s;
+    .container {
+      padding: 80px 20px;
     }
 
-    nav a:hover {
-      color: orange;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 100px 20px;
-    }
-
-    .hero h2 {
-      font-size: 42px;
-      margin-bottom: 15px;
-      font-weight: 700;
-    }
-
-    .hero p {
+    p {
       color: #aaa;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       font-size: 18px;
     }
 
     .btn {
+      display: inline-block;
       padding: 12px 25px;
       background: orange;
       color: black;
-      border: none;
       border-radius: 8px;
-      cursor: pointer;
+      text-decoration: none;
       font-weight: bold;
       transition: 0.3s;
     }
@@ -80,39 +60,25 @@
       transform: scale(1.05);
     }
 
-    .services {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      padding: 60px 20px;
-      flex-wrap: wrap;
+    .links {
+      margin-top: 30px;
     }
 
-    .card {
-      background: #1a1a1a;
-      padding: 25px;
-      border-radius: 15px;
-      width: 260px;
-      text-align: center;
+    .links a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
       transition: 0.3s;
     }
 
-    .card:hover {
-      transform: translateY(-8px);
-      background: #222;
-    }
-
-    .card h3 {
-      margin-bottom: 10px;
+    .links a:hover {
       color: orange;
-      font-size: 20px;
     }
 
     footer {
-      text-align: center;
+      margin-top: 60px;
       padding: 20px;
       border-top: 1px solid #222;
-      margin-top: 30px;
       color: #777;
     }
   </style>
@@ -122,38 +88,23 @@
 
 <header>
   <h1>🔥 Winix</h1>
-  <nav>
-    <a href="#">الرئيسية</a>
-    <a href="#">الخدمات</a>
-    <a href="#">تواصل</a>
-  </nav>
 </header>
 
-<section class="hero">
-  <h2>اربح بسهولة مع Winix 💰</h2>
+<div class="container">
+  <h2>اربح بسهولة 💰</h2>
   <p>منصة بسيطة لتحقيق دخل من الإنترنت</p>
-  <button class="btn">ابدأ الآن</button>
-</section>
 
-<section class="services">
-  <div class="card">
-    <h3>💸 أرباح يومية</h3>
-    <p>احصل على دخل يومي بسهولة</p>
-  </div>
+  <!-- زر تسجيل -->
+  <a href="login.html" class="btn">ابدأ الآن</a>
 
-  <div class="card">
-    <h3>📈 استثمار</h3>
-    <p>نظام استثمار بسيط وآمن</p>
+  <div class="links">
+    <a href="services.html">الخدمات</a>
+    <a href="#">تواصل</a>
   </div>
-
-  <div class="card">
-    <h3>🤝 دعوة أصدقاء</h3>
-    <p>اربح من خلال دعوة الآخرين</p>
-  </div>
-</section>
+</div>
 
 <footer>
-  © 2026 Winix - جميع الحقوق محفوظة
+  © 2026 Winix
 </footer>
 
 </body>

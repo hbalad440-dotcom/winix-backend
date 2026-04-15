@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>لوحة الأدمن</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+
+<style>
+body{
+  background:#0f0f0f;
+  color:white;
+  font-family:Cairo;
+  padding:20px;
+}
+
+h2{
+  color:orange;
+  text-align:center;
+}
+
+.box{
+  background:#1a1a1a;
+  padding:20px;
+  border-radius:15px;
+  margin-bottom:20px;
+}
+
+.item{
+  background:#222;
+  padding:10px;
+  margin:10px 0;
+  border-radius:10px;
+}
+
+button{
+  padding:5px 10px;
+  margin:5px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.ok{background:green;color:white;}
+.no{background:red;color:white;}
+</style>
+</head>
+
+<body>
+
+<h2>👑 لوحة الأدمن</h2>
+
+<div class="box">
+<h3>👥 المستخدمين</h3>
+<div id="users"></div>
+</div>
+
+<div class="box">
+<h3>💸 طلبات السحب</h3>
+<div id="withdraws"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, updateDoc, doc, deleteDoc } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBChYq1GZKU7RQ2rTN_gShncYhBukVPitw",
+  authDomain: "winix-f2660.firebaseapp.com",
+  projectId: "winix-f2660"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 🔐 حماية الأدمن (غير الاسم حسب حسابك)
+let adminUser = "admin"; 
+
+if(localStorage.getItem("user") !== adminUser){
+  document.body.innerHTML = "<h2>❌ ممنوع الدخول</h2>";
+}
+
+// 👥 تحميل المستخدمين
+async function loadUsers(){
+  let usersDiv = document.getElementById("users");
+  usersDiv.innerHTML = "";
+
+  let querySnapshot = await getDocs(collection(db, "users"));
+
+  querySnapshot.forEach(docu => {
+    let u = docu.data();
+
+    usersDiv.innerHTML += `
+      <div class="item">
+        👤 ${u.username} <br>
+        💰 ${u.balance}$ <br>
+        👥 ${u.refs}
+      </div>
+    `;
+  });
+}
+
+// 💸 تحميل طلبات السحب
+async function loadWithdraws(){
+  let div = document.getElementById("withdraws");
+  div.innerHTML = "";
+
+  let querySnapshot = await getDocs(collection(db, "withdraws"));
+
+  querySnapshot.forEach(docu => {
+    let w = docu.data();
+    let id = docu.id;
+
+    div.innerHTML += `
+      <div class="item">
+        👤 ${w.user} <br>
+        💸 ${w.amount}$ <br>
+        🏦 ${w.method} <br>
+        📊 ${w.status} <br>
+
+        <button class="ok" onclick="approve('${id}')">✅ موافقة</button>
+        <button class="no" onclick="reject('${id}')">❌ رفض</button>
+      </div>
+    `;
+  });
+}
+
+// ✅ موافقة
+window.approve = async function(id){
+  let ref = doc(db,"withdraws",id);
+
+  await updateDoc(ref,{
+    status:"approved"
+  });
+
+  alert("تمت الموافقة");
+  loadWithdraws();
+}
+
+// ❌ رفض
+window.reject = async function(id){
+  await deleteDoc(doc(db,"withdraws",id));
+  alert("تم الرفض");
+  loadWithdraws();
+}
+
+// تحميل
+loadUsers();
+loadWithdraws();
+
+</script>
+
+</body>
+</html>

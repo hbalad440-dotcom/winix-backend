@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تواصل معنا - Winix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color: white;
+      direction: rtl;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #1a1a1a;
+      padding: 35px;
+      border-radius: 20px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(255,165,0,0.25);
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+      color: orange;
+      margin-bottom: 15px;
+    }
+
+    p {
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background: orange;
+      color: black;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #ff9900;
+      transform: scale(1.05);
+    }
+
+    .whatsapp {
+      background: #25D366;
+      color: white;
+    }
+
+    .whatsapp:hover {
+      background: #1ebe5d;
+    }
+
+    .back {
+      margin-top: 15px;
+      display: block;
+      color: #aaa;
+      text-decoration: none;
+    }
+
+    .back:hover {
+      color: orange;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: orange;
+      color: black;
+      padding: 12px 20px;
+      border-radius: 10px;
+      display: none;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>📞 تواصل معنا</h2>
+
+  <p>للتواصل مع الإدارة اختر الطريقة المناسبة 👇</p>
+
+  <!-- واتساب -->
+  <a class="btn whatsapp" onclick="openWhatsApp()">
+    📱 التواصل مع الادارة عبر واتساب
+  </a>
+
+  <!-- ايميل -->
+  <a class="btn" onclick="comingSoon()">
+    📧 مراسلة عبر البريد
+  </a>
+
+  <!-- رجوع -->
+  <a href="dashboard.html" class="back">🔙 رجوع</a>
+</div>
+
+<div id="toast"></div>
+
+<script>
+
+// إشعار
+function showToast(msg){
+  let t = document.getElementById("toast");
+  t.innerText = msg;
+  t.style.display = "block";
+  setTimeout(()=> t.style.display="none",2000);
+}
+
+// تحقق تسجيل
+let user = localStorage.getItem("user");
+
+if(!user){
+  window.location.href = "login.html";
+}
+
+// واتساب
+function openWhatsApp(){
+  showToast("📱 جاري فتح واتساب...");
+  setTimeout(()=>{
+    window.open("https://wa.me/963931760702", "_blank");
+  },800);
+}
+
+// ايميل
+function comingSoon(){
+  showToast("🚧 قريباً...");
+}
+
+</script>
+
+</body>
+</html>

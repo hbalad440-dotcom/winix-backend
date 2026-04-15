@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>⚡ Winix Energy Game</title>
+
+<style>
+
+body{
+  background:#0f0f0f;
+  color:white;
+  font-family:Cairo;
+  text-align:center;
+}
+
+h1{color:orange}
+
+.stats{
+  margin:10px;
+}
+
+/* ⚡ طاقة */
+.energy-bar{
+  width:200px;
+  height:20px;
+  background:#222;
+  margin:10px auto;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.energy-fill{
+  height:100%;
+  background:orange;
+  width:0%;
+}
+
+/* بطاقات */
+.cards{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:20px;
+}
+
+.card{
+  width:100px;
+  height:140px;
+  background:#1a1a1a;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+button{
+  padding:10px 20px;
+  margin:5px;
+  background:orange;
+  border:none;
+  border-radius:10px;
+}
+
+#log{color:#aaa;margin-top:10px}
+
+</style>
+</head>
+
+<body>
+
+<h1>⚡ Winix Game</h1>
+
+<div class="stats">
+❤️ <span id="hp">100</span> |
+🤖 <span id="enemy">100</span> |
+💰 <span id="money">0</span>
+</div>
+
+<!-- ⚡ الطاقة -->
+<div class="energy-bar">
+  <div class="energy-fill" id="energyBar"></div>
+</div>
+<div>⚡ <span id="energy">0</span> / 10</div>
+
+<button onclick="draw()">🎴 لعب (1 طاقة)</button>
+<button onclick="openBox()">🎁 صندوق (2 طاقة)</button>
+
+<div class="cards" id="cards"></div>
+
+<div id="log"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSy...",
+  projectId:"winix-f2660"
+});
+
+const db = getFirestore(app);
+
+let user = localStorage.getItem("user");
+if(!user) location.href="login.html";
+
+let hp=100, enemy=100;
+let userData;
+
+// 🃏 بطاقات
+const cardsList = [
+  {name:"⚔️", dmg:20},
+  {name:"🔥", dmg:35},
+  {name:"❤️", heal:20}
+];
+
+// تحميل
+async function load(){
+  let ref = doc(db,"users",user);
+  let snap = await getDoc(ref);
+  userData = snap.data();
+
+  document.getElementById("money").innerText = userData.balance;
+  document.getElementById("energy").innerText = userData.energy;
+
+  updateEnergyBar();
+}
+load();
+
+// ⚡ تحديث البار
+function updateEnergyBar(){
+  let percent = (userData.energy / 10) * 100;
+  document.getElementById("energyBar").style.width = percent + "%";
+}
+
+// ⚡ شحن تلقائي
+setInterval(async ()=>{
+  if(userData.energy < 10){
+    userData.energy++;
+    await save();
+    load();
+  }
+},60000); // كل دقيقة
+
+// 🎴 لعب
+window.draw = ()=>{
+  if(userData.energy < 1){
+    log("❌ لا يوجد طاقة");
+    return;
+  }
+
+  userData.energy--;
+
+  let container=document.getElementById("cards");
+  container.innerHTML="";
+
+  for(let i=0;i<5;i++){
+    let c = cardsList[Math.floor(Math.random()*cardsList.length)];
+
+    let div=document.createElement("div");
+    div.className="card";
+    div.innerText=c.name;
+    div.onclick=()=>play(c);
+
+    container.appendChild(div);
+  }
+
+  save();
+  load();
+}
+
+// 🎁 صندوق
+window.openBox = async ()=>{
+  if(userData.energy < 2){
+    log("❌ تحتاج 2 طاقة");
+    return;
+  }
+
+  userData.energy -= 2;
+
+  let reward = Math.floor(Math.random()*200)+50;
+  userData.balance += reward;
+
+  await save();
+
+  log("🎁 ربحت "+reward+" ل.س");
+  load();
+}
+
+// ⚔️
+function play(c){
+
+  if(c.dmg){
+    enemy -= c.dmg;
+    log("⚔️ "+c.dmg);
+  }
+
+  if(c.heal){
+    hp += c.heal;
+    log("❤️");
+  }
+
+  enemyTurn();
+  update();
+  check();
+}
+
+// 🤖
+function enemyTurn(){
+  let dmg = Math.floor(Math.random()*20)+5;
+  hp -= dmg;
+}
+
+// تحديث
+function update(){
+  document.getElementById("hp").innerText = hp;
+  document.getElementById("enemy").innerText = enemy;
+}
+
+// فوز
+async function check(){
+  if(enemy<=0){
+    userData.balance += 150;
+    await save();
+    alert("🏆 +150");
+    reset();
+  }
+
+  if(hp<=0){
+    alert("💀 خسرت");
+    reset();
+  }
+}
+
+// حفظ
+async function save(){
+  let ref = doc(db,"users",user);
+  await updateDoc(ref,userData);
+}
+
+// إعادة
+function reset(){
+  hp=100;
+  enemy=100;
+}
+
+// لوق
+function log(t){
+  document.getElementById("log").innerText=t;
+}
+
+</script>
+
+</body>
+</html>
